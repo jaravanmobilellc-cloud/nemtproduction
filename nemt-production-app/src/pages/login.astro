@@ -1,0 +1,129 @@
+---
+// if user is already logged in, redirect to dashboard
+if (Astro.locals.userId) {
+    return Astro.redirect('/dashboard');
+}
+---
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" >
+        <title>NEMT Login</title>
+        <style>
+            /* Clean, centered login form */
+            body {
+                font-family: Arial, sans-serif;
+                background: #f4f7f6;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                margin: 0;
+            }
+            .login-container {
+                background: white;
+                padding: 2rem;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                width: 320px;
+            }
+            h2 {
+                margin-bottom: 20px;
+                color: #333;
+                text-align: center;
+            }
+            .form-group {
+                margin-bottom: 15px;
+            }
+            label {
+                display: block;
+                margin-bottom: 5px;
+                color: #666;
+                font-size: 14px;
+            }
+            input{
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                box-sizing: border-box;            
+                }
+                button {
+                width: 100%;
+                padding: 10px;
+                background: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                font-weight: bold;
+                cursor: pointer;
+                margin-top: 10px;
+                }
+                button:hover {
+                background: #0056b3;
+                }
+                .error-message {
+                color: red;
+                font-size: 14px;
+                margin-top: 10px;
+                text-align: center;
+                display: none;
+                }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <h2>NEMT Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required autocomplete="current-password">
+                </div>
+                <button type="submit">Sign In</button>
+                <div class="error-msg" id="error"></div>
+            </form>
+        </div>
+
+        <script>
+            //script runs in user browser
+            const form = document.getElementById('loginForm') as HTMLFormElement;
+            const errorDiv = document.getElementById('error')!;
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                errorDiv.style.display = 'none'; // Clear previous error messages
+
+                const username = (document.getElementById('username') as HTMLInputElement).value;
+                const password = (document.getElementById('password') as HTMLInputElement).value;
+                const csrfToken = document.cookie.split('; ').find((row) => row.startsWith('csrf_token='))?.split('=')[1] ?? '';
+
+                try {
+                    const response = await fetch('/api/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-Token': csrfToken,
+                        },
+                        body: JSON.stringify({ username, password })
+                    });
+                    const data = await response.json().catch(() => ({}));
+
+                    if (response.ok && data.success) {
+                        window.location.assign('/dashboard');
+                    } else {
+                        errorDiv.textContent = data.error || 'Login failed';
+                        errorDiv.style.display = 'block';
+                    }
+                } catch (error) {
+                    errorDiv.textContent = 'A connection error occurred.';
+                    errorDiv.style.display = 'block';
+                }
+            });
+
+        </script>
+    </body>
+</html>

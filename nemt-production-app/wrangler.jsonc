@@ -1,0 +1,23 @@
+{
+	"$schema": "./node_modules/wrangler/config-schema.json",
+	"compatibility_date": "2026-07-24",
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
+	"name": "nemt-production-app",
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "nemt-db",
+			"database_id": "2a4ef96c-bec1-43b4-bdbc-b2661adf23c4"
+		}
+	]
+}

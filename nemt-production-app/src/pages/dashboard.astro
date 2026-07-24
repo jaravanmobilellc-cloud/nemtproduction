@@ -1,0 +1,14 @@
+---
+const userId = Astro.locals.userId ?? null;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard</title>
+  </head>
+  <body>
+    <h1>Dashboard</h1>
+    <p>You are logged in{userId ? ` as ${userId}` : ''}.</p>
+  </body>
+</html>
