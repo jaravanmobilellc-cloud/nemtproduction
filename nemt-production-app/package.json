@@ -8,6 +8,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "predeploy": "node --input-type=module -e \"import { rmSync } from 'node:fs'; rmSync('.wrangler', { recursive: true, force: true });\"",
+    "deploy": "npm run predeploy && npm run build && npx wrangler deploy --config dist/server/wrangler.json",
     "preview": "astro preview",
     "astro": "astro",
     "generate-types": "wrangler types"
