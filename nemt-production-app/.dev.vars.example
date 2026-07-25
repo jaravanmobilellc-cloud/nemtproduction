@@ -1,0 +1,2 @@
+# Local development secrets (do NOT commit real secrets)
+JWT_SECRET=REPLACE_ME
