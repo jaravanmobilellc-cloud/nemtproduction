@@ -5,10 +5,12 @@ export default defineConfig({
   output: 'server',
   adapter: cloudflare({
     platformProxy: {
-      enabled: true
+      enabled: true,
+      // Forces the internal compiler to output structural files 
+      // designed specifically for the Cloudflare Pages engine
+      configPath: 'pages' 
     }
   }),
-  // Explicitly set the output folders to align with the routing expectations
   outDir: './dist',
   build: {
     server: './dist/server',
