@@ -5,15 +5,8 @@ export default defineConfig({
   output: 'server',
   adapter: cloudflare({
     platformProxy: {
-      enabled: true,
-      // Forces the internal compiler to output structural files 
-      // designed specifically for the Cloudflare Pages engine
-      configPath: 'pages' 
+      enabled: true
     }
-  }),
-  outDir: './dist',
-  build: {
-    server: './dist/server',
-    client: './dist/client'
-  }
+  })
+  // REMOVED the manual outDir, server, and client build paths
 });
